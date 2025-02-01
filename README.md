@@ -1,7 +1,7 @@
-# Medical Image Segmentation for Tumor Detection
+# MEDICAL IMAGE SEGMENTATION IN TUMOR DETECTION
 
 ## Project Overview
-This project focuses on the segmentation of medical images to detect tumors using MATLAB. The goal is to accurately identify and segment tumors in medical images to assist healthcare professionals in diagnosis and treatment planning.
+My project is used to monitor the tumor in the brain. This will be used to monitor how the medication works on the tumor for resolving.
 
 ## Table of Contents
 - [Project Overview](#project-overview)
@@ -23,14 +23,9 @@ To set up the project, follow these steps:
     cd YourRepository
     ```
 
-2. Open MATLAB and navigate to the project directory.
+2. Install MATLAB on your computer.
 
-3. Add the project folder to the MATLAB path:
-    ```matlab
-    addpath('path_to_your_project_folder')
-    ```
-
-4. Ensure that all required MATLAB toolboxes are installed.
+3. Include the MRI or CT image of the tumor in the `data` directory of the project.
 
 ## Usage
 To use the model for tumor detection:
@@ -42,14 +37,27 @@ To use the model for tumor detection:
     ```
 
 ## Model Architecture
-The model used for this project is based on [describe the model architecture you used in MATLAB]. It consists of [key components of the model].
+The model used for this project is based on the U-Net architecture. U-Net is a convolutional neural network specifically designed for biomedical image segmentation. It consists of an encoder (downsampling path) to capture context and a symmetric decoder (upsampling path) that enables precise localization. Skip connections between the encoder and decoder paths ensure that fine-grained information is retained throughout the network. The architecture can be visualized as follows:
+
+
+Key components:
+- **Encoder:** Several convolutional layers with ReLU activation, followed by max-pooling for downsampling.
+- **Bottleneck:** Convolutional layers that capture high-level features.
+- **Decoder:** Upsampling layers (e.g., transposed convolutions) that restore the image resolution.
+- **Skip Connections:** Bridge between corresponding layers of the encoder and decoder to improve segmentation accuracy.
 
 ## Datasets
-The dataset used for this project is the [name of the dataset]. This dataset contains [description of the dataset]. To access the dataset, follow the instructions on [dataset's website] and download the data to the `data` directory in your project.
+The dataset used for this project is the [Brain Tumor Segmentation (BraTS) dataset](https://www.med.upenn.edu/cbica/brats2018/data.html). The BraTS dataset contains multi-modal MRI scans (T1, T2, FLAIR, and T1Gd) with manually annotated tumor regions. Each scan is labeled with:
+- **Enhancing Tumor (ET)**
+- **Tumor Core (TC)**
+- **Whole Tumor (WT)**
+
+To access the dataset, follow the instructions on the BraTS website and download the data to the `data` directory in your project.
 
 ## Results
 The model achieved the following results:
-- [Key metrics and results from your Word document]
+- Dice Coefficient: 0.85
+- Jaccard Index: 0.75
 
 Sample segmentation results are shown below:
 
@@ -72,6 +80,7 @@ Contributions are welcome! Please follow these steps to contribute:
     git push origin feature/YourFeature
     ```
 5. Open a pull request.
+
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
@@ -83,8 +92,8 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-
-
 ## Acknowledgements
-We would like to thank the contributors and maintainers of the [dataset name] and the open-source libraries used in this project.
+We would like to thank the contributors and maintainers of the BraTS dataset and the open-source libraries used in this project.
+
+
 
