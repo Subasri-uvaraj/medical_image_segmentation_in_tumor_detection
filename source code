@@ -1,0 +1,61 @@
+% Load MRI or CT scan image
+img = imread(&#39;mri.jpeg&#39;);
+
+% Preprocessing
+img_with_noise = imnoise(img, &#39;gaussian&#39;, 0, 0.01); % Add noise for testing
+
+% Check if the image is RGB
+if ndims(img_with_noise) == 3
+% Convert RGB to grayscale
+img_grayscale = rgb2gray(img_with_noise);
+
+% Enhance the grayscale image
+img_enhanced = imadjust(img_grayscale);
+
+% Convert the enhanced grayscale image back to RGB
+img_enhanced_rgb = repmat(img_enhanced, [1, 1, 3]);
+else
+% Enhance the grayscale image directly
+img_enhanced = imadjust(img_with_noise);
+end
+
+% Resizing
+img_resized = imresize(img_enhanced, [256, 256]);
+
+% Display intermediate results
+figure;
+subplot(2,2,1); imshow(img_with_noise); title(&#39;Image with Noise&#39;);
+subplot(2,2,2); imshow(img_enhanced); title(&#39;Enhanced Image&#39;);
+subplot(2,2,3); imshow(img_resized); title(&#39;Resized Image&#39;);
+
+% Feature extraction
+features = graycoprops(graycomatrix(img_resized));
+shape_features = regionprops(bwlabel(img_resized &gt; graythresh(img_resized)), &#39;Area&#39;, &#39;Perimeter&#39;,
+&#39;Eccentricity&#39;);
+
+% Calculate circularity
+for i = 1:length(shape_features)
+shape_features(i).Circularity = 4 * pi * shape_features(i).Area / (shape_features(i).Perimeter *
+shape_features(i).Perimeter);
+end
+
+% Segmentation
+% Otsu&#39;s thresholding
+level = graythresh(img_resized);
+segmented_img = im2bw(img_resized, level);
+
+% Watershed segmentation
+watershed_img = watershed(imcomplement(segmented_img));
+watershed_img = bwperim(watershed_img);
+
+% Post-processing
+segmented_img_cleaned = bwareaopen(segmented_img, 100);
+segmented_img_filled = imfill(segmented_img_cleaned, &#39;holes&#39;);
+
+% Display intermediate results
+figure;
+
+subplot(2,2,1); imshow(segmented_img); title(&#39;Segmented Image (Otsu)&#39;);
+subplot(2,2,2); imshow(watershed_img); title(&#39;Segmented Image (Watershed)&#39;);
+subplot(2,2,3); imshow(segmented_img_cleaned); title(&#39;Cleaned Segmented Image&#39;);
+subplot(2,2,4); imshow(segmented_img_filled); title(&#39;Filled Segmented Image&#39;);
